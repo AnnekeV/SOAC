@@ -14,7 +14,7 @@ import plotting_functions as pf
 im.reload(pf)
 im.reload(rf)
 
-directory = "/Users/niekcollotdescury/Desktop/SOAC/project"
+directory = pf.directory 
 
 ###############################################################
 # Constants
@@ -57,7 +57,7 @@ bedrock        = np.linspace(bedrock_l , bedrock_r , n)
 ###############################################################
 # Variables
 ###############################################################
-time          = int(30000 / DT_days)      # timesteps
+time          = int(1500 / DT_days)      # timesteps
 gamma         = 0.3        # inertia
 
 
@@ -84,12 +84,10 @@ def run_code(flux_in):
     flow_dif[0] = h[0 ,-1]*u[0 , -1]*W - (flux_in[-1]*W) 
     ''' loop for number of timesteps '''
     t=0
-    run_time = 0
     t_plot = 0
-    stable_time = [] 
     stability_count = 0
     
-    while run_time < time-1:   
+    while t < time-1:   
 
         h[t+1, :]  = rf.runt(u[t, :], h[t, :] , flux_in[t] , 
                       bedrock ,As , DX , n , A , DT , gamma)
@@ -102,36 +100,27 @@ def run_code(flux_in):
 
         t        += 1
         t_plot   += 1
-        run_time +=1
         
         outflow = h[t ,-1]*u[t , -1]*W
         flow_dif[t] = outflow - (flux_in[-1]*W) 
         if abs(flow_dif[t]) <= 0.02:
+            
             stability_count +=1
             if stability_count == (int(10/DT_days)):
-                run_time =0
-                stable_time.append(t_plot)
-                t_plot=0
-                
-                flux_in += 10e-3 
-                print ("stability")
-        
+                t +=1e7
 
-        
-        if len(stable_time) == 1:
-            print (len(stable_time))
-            break
+                print ("stability")
         
         
         percentage = t / time * 100
     
         if t%1000 ==0:
             run_duration = timer()
-            print (" time:{}".format( run_duration - start))
+            print (" {} steps :{:.2f}".format(t,  run_duration - start))
         
        
         
-    return u , h , s , grounding_line , flow_dif , stable_time
+    return u , h , s , grounding_line , flow_dif , t_plot
 
 u , h , s , grounding_line , flow_dif , t_plot = run_code(flux_in)
 
@@ -145,25 +134,26 @@ u , h , s , grounding_line , flow_dif , t_plot = run_code(flux_in)
 # 
 # t_plot = len(grounding_line)
     
-# time_axis = np.linspace(0 , t_plot*DT_days , t_plot)                       # time axis for plots 
+    
+time_axis = np.linspace(0 , t_plot*DT_days , t_plot)                       # time axis for plots 
 ###############################################################
 # Plot u, h, flow difference and grounding line
-###############################################################
-# pf.plot(h[0:t_plot] , "Height (m)" , "Elevation shelf" ,s[0:t_plot] 
-#         , True , grounding_line , t_plot,DT_days, n , DX ,bedrock )
-# pf.plot(3600*24*365*u[0:t_plot] ,"speed (m/yr)" , "Velocity" ,s[0:t_plot] 
-#         , False , grounding_line  , t_plot,DT_days, n , DX ,bedrock )
-# 
-# 
-# 
-# pf.plot_simpel(time_axis, flow_dif[0:t_plot] *24*365*3600*RHOI / (10e12), 
-#             "Evolution flux balance" , r"$\Delta$ flux (GT/yr)"
-#             ,"Time days (days)" , False , "nothin" , "darkgreen")
-# 
-# pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution grounding line" , 
-#             "Distance to influx (km)", "Time (days)" , True , 
-#             "Initial flux: {:.2f} in GT/yr"
-#             .format(flux_in[0]*W*24*365*3600*RHOI / (10e12)) , "darkblue")
+##############################################################
+pf.plot(h[0:t_plot] , "Height (m)" , "Elevation shelf" ,s[0:t_plot] 
+        , True , grounding_line , t_plot,DT_days, n , DX ,bedrock )
+pf.plot(3600*24*365*u[0:t_plot] ,"speed (m/yr)" , "Velocity" ,s[0:t_plot] 
+        , False , grounding_line  , t_plot,DT_days, n , DX ,bedrock )
+
+
+
+pf.plot_simpel(time_axis, flow_dif[0:t_plot] *24*365*3600*RHOI / (10e12), 
+            "Evolution flux balance" , r"$\Delta$ flux (GT/yr)"
+            ,"Time days (days)" , False , "nothin" , "darkgreen")
+
+pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution grounding line" , 
+            "Distance to influx (km)", "Time (days)" , True , 
+            "Initial flux: {:.2f} in GT/yr"
+            .format(flux_in[0]*W*24*365*3600*RHOI / (10e12)) , "darkblue")
 
 
 ###############################################################

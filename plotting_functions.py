@@ -11,16 +11,19 @@ import gc
 import imageio
 import importlib as im
 
+
+plt.close("all")
+
 ###############################################################
 # Import module with plotting parameters
 ###############################################################
 
-import sys
-sys.path.insert(0,"/Users/niekcollotdescury/Documents/code/")
-import plotting_parameters as pm
-im.reload(pm)
+# import sys
+# sys.path.insert(0,"/Users/niekcollotdescury/Documents/code/")
+# import plotting_parameters as pm
+# im.reload(pm)
 
-directory = "/Users/niekcollotdescury/Desktop/SOAC/project"
+directory = "C:/Users/annek/Documents/2018-2019/SOAC/project"
 
 ###############################################################
 # Functions
