@@ -9,12 +9,12 @@ import numpy as np
 import importlib as im
 
 import running_functions as rf
-import plotting_functions as pf
-
-im.reload(pf)
-im.reload(rf)
-
-directory = pf.directory 
+# import plotting_functions as pf
+# 
+# im.reload(pf)
+# im.reload(rf)
+# 
+# directory = pf.directory 
 
 ###############################################################
 # Constants
@@ -27,7 +27,7 @@ N       =  3                # glens flow law exponent
 DX      =  200              # m
 L       =  50000            # m
 W       =  40000
-DT_days = 0.5
+DT_days =  0.5
 DT      =  24*3600*DT_days  # s
 A       =  1e-24            # ice flow parameter
 As      =  130
@@ -57,7 +57,7 @@ bedrock        = np.linspace(bedrock_l , bedrock_r , n)
 ###############################################################
 # Variables
 ###############################################################
-time          = int(1500 / DT_days)      # timesteps
+time          = int(1500/ DT_days)      # timesteps
 gamma         = 0.3        # inertia
 
 
@@ -93,11 +93,11 @@ def run_code(flux_in):
                       bedrock ,As , DX , n , A , DT , gamma)
         # h[t+1, :]  = euler(u[t, :], h[t, :])
         
-        u[t+1, :] , s[t+1 ,:] , grounding_line[t+1] = rf.u_func(u_initial , h[0, :] , 
+        # print(t+1)
+        u[t+1, :] , s[t+1 ,:] , grounding_line[t+1] = rf.u_func(u_initial , h[t, :] , 
                                                         flux_in[0], bedrock ,As , DX , n , A)
+        # print("\n \n")
         
-        
-
         t        += 1
         t_plot   += 1
         
@@ -116,10 +116,9 @@ def run_code(flux_in):
     
         if t%1000 ==0:
             run_duration = timer()
-            print (" {} steps :{:.2f}".format(t,  run_duration - start))
+            print (" {} steps :{:.2f} s".format(t,  run_duration - start))
         
        
-        
     return u , h , s , grounding_line , flow_dif , t_plot
 
 u , h , s , grounding_line , flow_dif , t_plot = run_code(flux_in)
@@ -136,10 +135,11 @@ u , h , s , grounding_line , flow_dif , t_plot = run_code(flux_in)
     
     
 time_axis = np.linspace(0 , t_plot*DT_days , t_plot)                       # time axis for plots 
+
 ###############################################################
 # Plot u, h, flow difference and grounding line
 ##############################################################
-pf.plot(h[0:t_plot] , "Height (m)" , "Elevation shelf" ,s[0:t_plot] 
+pf.plot(h[0:t_plot,:] , "Height (m)" , "Elevation shelf" ,s[0:t_plot,:] 
         , True , grounding_line , t_plot,DT_days, n , DX ,bedrock )
 pf.plot(3600*24*365*u[0:t_plot] ,"speed (m/yr)" , "Velocity" ,s[0:t_plot] 
         , False , grounding_line  , t_plot,DT_days, n , DX ,bedrock )
@@ -168,14 +168,15 @@ pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution groun
 ###############################################################
 # savetxt for gemini run
 ###############################################################
-# directory = "/home/students/6256481/"
-# np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
-#             As , DT_days , time * DT_days , DX , flux_cons),        
-#             (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
-# np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
-#             As , DT_days , time * DT_days , DX , flux_cons),        
-#             (h[0,:] , h[t])) 
- 
+
+directory = "/home/students/6252699/"
+np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+            As , DT_days , time * DT_days , DX , flux_cons),        
+            (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
+np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+            As , DT_days , time * DT_days , DX , flux_cons),        
+            (h[0,:] , h[t])) 
+  
 
 end = timer()
 print ("Time elapsed: {}".format(end-start)) 
