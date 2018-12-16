@@ -9,12 +9,12 @@ import numpy as np
 import importlib as im
 
 import running_functions as rf
-# import plotting_functions as pf
-# 
-# im.reload(pf)
-# im.reload(rf)
-# 
-# directory = pf.directory 
+import plotting_functions as pf
+
+im.reload(pf)
+im.reload(rf)
+
+directory = pf.directory 
 
 ###############################################################
 # Constants
@@ -168,15 +168,15 @@ pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution groun
 ###############################################################
 # savetxt for gemini run
 ###############################################################
-
-directory = "/home/students/6252699/"
-np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
-            As , DT_days , time * DT_days , DX , flux_cons),        
-            (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
-np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
-            As , DT_days , time * DT_days , DX , flux_cons),        
-            (h[0,:] , h[t])) 
-  
+# 
+# directory = "/home/students/6252699/soac/"
+# np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+#             As , DT_days , time * DT_days , DX , flux_cons),        
+#             (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
+# np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+#             As , DT_days , time * DT_days , DX , flux_cons),        
+#             (h[0,:] , h[t_plot,:])) 
+#   
 
 end = timer()
 print ("Time elapsed: {}".format(end-start)) 
