@@ -23,7 +23,8 @@ plt.close("all")
 # import plotting_parameters as pm
 # im.reload(pm)
 
-directory = "C:/Users/annek/Documents/2018-2019/SOAC/project"
+# directory = "C:/Users/annek/Documents/2018-2019/SOAC/project"
+directory = "Users/niekcollotdescury/Desktop/SOAC/project"
 
 ###############################################################
 # Functions

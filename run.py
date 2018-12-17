@@ -2,19 +2,22 @@
 ''' SOAC project glacier
 Niek collot d'escury & Anneke Vries
 '''
-from timeit import default_timer as timer
-start = timer()
 
+""" Always on"""
 import numpy as np
-import importlib as im
-
 import running_functions as rf
-import plotting_functions as pf
 
-im.reload(pf)
-im.reload(rf)
+""" Only on for computer run """
+# from timeit import default_timer as timer
+# start = timer()
 
-directory = pf.directory 
+# import importlib as im
+# import plotting_functions as pf
+# 
+# im.reload(pf)
+# im.reload(rf)
+
+# directory = pf.directory 
 
 ###############################################################
 # Constants
@@ -94,7 +97,7 @@ def run_code(flux_in):
         # h[t+1, :]  = euler(u[t, :], h[t, :])
         
         # print(t+1)
-        u[t+1, :] , s[t+1 ,:] , grounding_line[t+1] = rf.u_func(u_initial , h[t, :] , 
+        u[t+1, :] , s[t+1 ,:] , grounding_line[t+1] = rf.u_func(u_initial , h[t+1, :] , 
                                                         flux_in[0], bedrock ,As , DX , n , A)
         # print("\n \n")
         
@@ -112,11 +115,10 @@ def run_code(flux_in):
                 print ("stability")
         
         
-        percentage = t / time * 100
-    
-        if t%1000 ==0:
-            run_duration = timer()
-            print (" {} steps :{:.2f} s".format(t,  run_duration - start))
+        # percentage = t / time * 100
+        # if t%1000 ==0:
+            # run_duration = timer()
+            # print (" {} steps :{:.2f} s".format(t,  run_duration - start))
         
        
     return u , h , s , grounding_line , flow_dif , t_plot
@@ -139,21 +141,21 @@ time_axis = np.linspace(0 , t_plot*DT_days , t_plot)                       # tim
 ###############################################################
 # Plot u, h, flow difference and grounding line
 ##############################################################
-pf.plot(h[0:t_plot,:] , "Height (m)" , "Elevation shelf" ,s[0:t_plot,:] 
-        , True , grounding_line , t_plot,DT_days, n , DX ,bedrock )
-pf.plot(3600*24*365*u[0:t_plot] ,"speed (m/yr)" , "Velocity" ,s[0:t_plot] 
-        , False , grounding_line  , t_plot,DT_days, n , DX ,bedrock )
-
-
-
-pf.plot_simpel(time_axis, flow_dif[0:t_plot] *24*365*3600*RHOI / (10e12), 
-            "Evolution flux balance" , r"$\Delta$ flux (GT/yr)"
-            ,"Time days (days)" , False , "nothin" , "darkgreen")
-
-pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution grounding line" , 
-            "Distance to influx (km)", "Time (days)" , True , 
-            "Initial flux: {:.2f} in GT/yr"
-            .format(flux_in[0]*W*24*365*3600*RHOI / (10e12)) , "darkblue")
+# pf.plot(h[0:t_plot,:] , "Height (m)" , "Elevation shelf" ,s[0:t_plot,:] 
+#         , True , grounding_line , t_plot,DT_days, n , DX ,bedrock )
+# pf.plot(3600*24*365*u[0:t_plot] ,"speed (m/yr)" , "Velocity" ,s[0:t_plot] 
+#         , False , grounding_line  , t_plot,DT_days, n , DX ,bedrock )
+# 
+# 
+# 
+# pf.plot_simpel(time_axis, flow_dif[0:t_plot] *24*365*3600*RHOI / (10e12), 
+#             "Evolution flux balance" , r"$\Delta$ flux (GT/yr)"
+#             ,"Time days (days)" , False , "nothin" , "darkgreen")
+# 
+# pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution grounding line" , 
+#             "Distance to influx (km)", "Time (days)" , True , 
+#             "Initial flux: {:.2f} in GT/yr"
+#             .format(flux_in[0]*W*24*365*3600*RHOI / (10e12)) , "darkblue")
 
 
 ###############################################################
@@ -168,15 +170,16 @@ pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution groun
 ###############################################################
 # savetxt for gemini run
 ###############################################################
-# 
+
 # directory = "/home/students/6252699/soac/"
-# np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
-#             As , DT_days , time * DT_days , DX , flux_cons),        
-#             (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
-# np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
-#             As , DT_days , time * DT_days , DX , flux_cons),        
-#             (h[0,:] , h[t_plot,:])) 
+directory = "/home/students/6256481/"
+np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+            As , DT_days , time * DT_days , DX , flux_cons),        
+            (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
+np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+            As , DT_days , time * DT_days , DX , flux_cons),        
+            (h[0,:] , h[t_plot,:])) 
 #   
 
-end = timer()
-print ("Time elapsed: {}".format(end-start)) 
+# end = timer()
+# print ("Time elapsed: {}".format(end-start)) 
