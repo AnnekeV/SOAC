@@ -24,7 +24,7 @@ plt.close("all")
 # im.reload(pm)
 
 # directory = "C:/Users/annek/Documents/2018-2019/SOAC/project"
-directory = "Users/niekcollotdescury/Desktop/SOAC/project"
+directory = "/Users/niekcollotdescury/Desktop/SOAC/project"
 
 ###############################################################
 # Functions
