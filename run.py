@@ -43,13 +43,12 @@ u_rand_left   = 3.5e-5     # initial velocity  m/s (±1km/yr)
 u_rand_right  = 3e-5       # final velocity    m/s (1km/yr)
 h_left        = 600        # initial height    m 
 h_right       = 200
-bedrock_l     = -100
-bedrock_r     = -700
-slope         = abs((bedrock_l + bedrock_r) / L)
-print (slope)
+bedrock_l     = -200
+bedrock_r     = -250
+slope         = abs(bedrock_r - bedrock_l) / L
 loc           = 40e3
 width         = 10e3
-amp           = 200
+amp           = 300
 
 h_initial      = np.linspace(h_left , h_right, n)            # initial gues for the velocity
 u_initial      = np.linspace(u_rand_left , u_rand_right , n) # initial gues for the height
@@ -65,7 +64,7 @@ bedrock        = np.linspace(bedrock_l , bedrock_r , n)
 ###############################################################
 # Variables
 ###############################################################
-time          = int(2000/ DT_days)      # timesteps
+time          = int(1500/ DT_days)      # timesteps
 gamma         = 0.3        # inertia
 
 
