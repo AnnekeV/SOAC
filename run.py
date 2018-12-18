@@ -88,12 +88,6 @@ bedrock = make_bedrock_gauss(n ,L ,bedrock_l , slope ,amp,loc , width )
 bedrock_r     = bedrock[-1]
 bed = "BNL"
 
-# import matplotlib.pyplot as plt
-# plt.plot(bedrock)
-# plt.show()
-
-
-
 
 
 def run_code(flux_cons):
@@ -133,7 +127,6 @@ def run_code(flux_cons):
             stability_count +=1
             if stability_count == (int(10/DT_days)):
                 t +=1e7
-
                 print ("stability")
         
         
@@ -195,16 +188,16 @@ pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution groun
 
 # directory = "/home/students/6252699/soac/"
 # directory = "/home/students/6256481/"
-np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
+np.savetxt( directory + "/output/output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
             As , DT_days , time * DT_days , DX , flux_cons , bed),        
             (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
-np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
+np.savetxt( directory + "/output/output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
             As , DT_days , time * DT_days , DX , flux_cons, bed),        
             (h[0,:] ,  h[int(t_plot/3),:],  h[int(t_plot*2/3),:], h[t_plot,:])) 
-np.savetxt( directory + "output_u_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
+np.savetxt( directory + "/output/output_u_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
             As , DT_days , time * DT_days , DX , flux_cons, bed),        
             (u[0,:] ,  u[int(t_plot/3),:],  u[int(t_plot*2/3),:], u[t_plot,:])) 
-np.savetxt( directory + "output_s_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
+np.savetxt( directory + "/output/output_s_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
             As , DT_days , time * DT_days , DX , flux_cons, bed),        
             (s[0,:] ,  s[int(t_plot/3),:],  s[int(t_plot*2/3),:], s[t_plot,:])) 
 #   

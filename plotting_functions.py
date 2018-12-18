@@ -19,12 +19,13 @@ plt.close("all")
 ###############################################################
 
 import sys
-sys.path.insert(0,"C:/Users/annek/Documents/Python Scripts")
+# sys.path.insert(0,"C:/Users/annek/Documents/Python Scripts")
+sys.path.insert(0 , "Users/niekcollotdescury/Documents/code/")
 import plotting_parameters as pm
 im.reload(pm)
 
-directory = "C:/Users/annek/Documents/2018-2019/SOAC/project/"
-# directory = "/Users/niekcollotdescury/Desktop/SOAC/project"
+# directory = "C:/Users/annek/Documents/2018-2019/SOAC/project/"
+directory = "/Users/niekcollotdescury/Desktop/SOAC/project"
 
 ###############################################################
 # Functions
@@ -47,8 +48,7 @@ def plot(X , ylabel, title ,s , bolean , grounding , run_time , DT_days , n, DX 
     
 
     ''' color schemes for velocity and ice '''
-    colors_v = mpl.cm.gist_rainbow(np.linspace(0, 1 , int(run_time)))    # colors velocity
-    colors_i = mpl.cm.gist_rainbow(np.linspace(0, 1 , int(run_time)))        # colors ice bottom and surface
+    colors = mpl.cm.rbg(np.linspace(0, 1 , int(run_time)))    # colors velocity
     
     ''' sinus wave for wave for water level '''
     n_list = np.arange(0 , n ,1)
@@ -76,8 +76,8 @@ def plot(X , ylabel, title ,s , bolean , grounding , run_time , DT_days , n, DX 
             ax.fill_between(fill_x , s[-1,:] , (s[-1,:]-X[-1,:]) , color = 'deepskyblue')
             
             ''' plot ice surface line and bottom ice line '''
-            ax.plot(x_grid , s[i, :] , color = colors_i[i] , label = "Thickness: t = {} days".format(i*DT_days)) 
-            ax.plot(x_grid , (s[i,:]-X[i,:]) , color = colors_i[i] ) 
+            ax.plot(x_grid , s[i, :] , color = colors[i] , label = "t = {} days".format(i*DT_days)) 
+            ax.plot(x_grid , (s[i,:]-X[i,:]) , color = colors[i] ) 
             plt.yticks(np.arange(-1000 ,2000 , 250 ))
             
             ''' Show position grounding line with arrow to text box '''
@@ -90,7 +90,7 @@ def plot(X , ylabel, title ,s , bolean , grounding , run_time , DT_days , n, DX 
             # box("Water" , 0.9 , 0.1 ,ax , "blue")
             # box("Grounding line" , 0.7 , 0.8 , ax , "white")
             
-            plt.legend(bbox_to_anchor=(1.1, 1))
+            plt.legend()
             
             
             filename_h = "fig_{}".format(i)
@@ -103,7 +103,7 @@ def plot(X , ylabel, title ,s , bolean , grounding , run_time , DT_days , n, DX 
             # fig , ax = plt.subplots()
             # ax = fig.add_axes([0,0,1,1])            
             
-            ax.plot(np.arange(0 , n*DX , DX)/1000 , X[i, :] , label = "t={}" .format(i) , color = colors_v[i])
+            ax.plot(np.arange(0 , n*DX , DX)/1000 , X[i, :] , label = "t={}" .format(i*DT_days) , color = colors[i])
             plt.legend()            
                                     
             filename_v = "fig_{}".format(i)
