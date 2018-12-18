@@ -19,12 +19,12 @@ plt.close("all")
 ###############################################################
 
 import sys
-sys.path.insert(0,"/Users/niekcollotdescury/Documents/code/")
+sys.path.insert(0,"C:/Users/annek/Documents/Python Scripts")
 import plotting_parameters as pm
 im.reload(pm)
 
 directory = "C:/Users/annek/Documents/2018-2019/SOAC/project"
-directory = "/Users/niekcollotdescury/Desktop/SOAC/project"
+# directory = "/Users/niekcollotdescury/Desktop/SOAC/project"
 
 ###############################################################
 # Functions
@@ -63,7 +63,7 @@ def plot(X , ylabel, title ,s , bolean , grounding , run_time , DT_days , n, DX 
     fill_bottom_bedrock = np.linspace(bedrock[-1] , bedrock[-1] , n)
     x_grid = np.linspace(0 , n*DX , n)/1000
     
-    for i in range(0 , run_time , (run_time // 5)-1):# max(1 , time//5 -1)) :
+    for i in range(0 , int(run_time*6/5) , int(run_time // 4)):# max(1 , time//5 -1)) :
         if bolean == True:
             # fig , ax = plt.subplots()
             # ax = fig.add_axes([0,0,1,1])
@@ -73,10 +73,10 @@ def plot(X , ylabel, title ,s , bolean , grounding , run_time , DT_days , n, DX 
 
             ''' filled plot bedrock and ice'''
             ax.fill_between(fill_x ,bedrock , fill_bottom_bedrock, color = 'peru')                  
-            ax.fill_between(fill_x , s[i,:] , (s[i,:]-X[i,:]) , color = 'deepskyblue')
+            ax.fill_between(fill_x , s[-1,:] , (s[-1,:]-X[-1,:]) , color = 'deepskyblue')
             
             ''' plot ice surface line and bottom ice line '''
-            ax.plot(x_grid , s[i, :] , color = colors_i[i] , label = "Thickness: t = {}".format(i)) 
+            ax.plot(x_grid , s[i, :] , color = colors_i[i] , label = "Thickness: t = {} days".format(i*DT_days)) 
             ax.plot(x_grid , (s[i,:]-X[i,:]) , color = colors_i[i] ) 
             plt.yticks(np.arange(-600 ,400 , 100 ))
             

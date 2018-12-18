@@ -8,16 +8,16 @@ import numpy as np
 import running_functions as rf
 
 # """ Only on for computer run """
-# from timeit import default_timer as timer
-# start = timer()
-# 
-# import importlib as im
-# import plotting_functions as pf
-# 
-# im.reload(pf)
-# im.reload(rf)
-# 
-# directory = pf.directory 
+from timeit import default_timer as timer
+start = timer()
+
+import importlib as im
+import plotting_functions as pf
+
+im.reload(pf)
+im.reload(rf)
+
+directory = pf.directory 
 
 ###############################################################
 # Constants
@@ -27,13 +27,13 @@ RHOI    =  912              # kg/m3
 RHOW    =  1030             # kg/m3
 G       =  9.8              # m/s2
 N       =  3                # glens flow law exponent
-DX      =  200              # m
+DX      =  1000              # m
 L       =  50000            # m
 W       =  40000
 DT_days =  0.5
 DT      =  24*3600*DT_days  # s
-A       =  1e-24            # ice flow parameter
-As      =  130
+A       =  1e-22           # ice flow parameter
+As      =  150
 n       =  L//DX            # length shelf
 
 ###############################################################
@@ -41,11 +41,11 @@ n       =  L//DX            # length shelf
 ###############################################################
 u_rand_left   = 3.5e-5     # initial velocity  m/s (±1km/yr)
 u_rand_right  = 3e-5       # final velocity    m/s (1km/yr)
-h_left        = 600        # initial height    m 
-h_right       = 200
-bedrock_l     = -200
+h_left        = 1900        # initial height    m 
+h_right       = 250
+bedrock_l     = 1
 bedrock_r     = -250
-slope         = 0.005
+slope         = 0.008
 loc           = 30e3
 width         = 5e3
 amp           = 300
@@ -65,12 +65,12 @@ bedrock        = np.linspace(bedrock_l , bedrock_r , n)
 ###############################################################
 # Variables
 ###############################################################
-time          = int(10000/ DT_days)      # timesteps
+time          = int(2000/ DT_days)      # timesteps
 gamma         = 0.3        # inertia
 
 
 ''' Constant influx '''
-flux_cons = 100e-3 
+flux_cons = 500e-3 
 
 
 ###############################################################
@@ -127,19 +127,20 @@ def run_code(flux_cons):
         
         outflow = h[t ,-1]*u[t , -1]*W
         flow_dif[t] = outflow - (flux_cons*W) 
-        if abs(flow_dif[t]) <= 0.02:
+        if abs(flow_dif[t]/(flux_cons*W)) <= 0.01:
             
             stability_count +=1
+            print(stability_count)
             if stability_count == (int(10/DT_days)):
                 t +=1e7
 
                 print ("stability")
         
-        # 
-        # # percentage = t / time * 100
-        # if t%500 ==0:
-        #     run_duration = timer()
-        #     print (" {} steps :{:.2f} s".format(t,  run_duration - start))
+        
+        # percentage = t / time * 100
+        if t%500 ==0:
+            run_duration = timer()
+            print (" {} steps :{:.2f} s".format(t,  run_duration - start))
         
        
     return u , h , s , grounding_line , flow_dif , t_plot
@@ -162,21 +163,21 @@ time_axis = np.linspace(0 , t_plot*DT_days , t_plot)                       # tim
 ###############################################################
 # Plot u, h, flow difference and grounding line
 ##############################################################
-# pf.plot(h[0:t_plot,:] , "Height (m)" , "Elevation shelf" ,s[0:t_plot,:] 
-#         , True , grounding_line , t_plot,DT_days, n , DX ,bedrock )
-# pf.plot(3600*24*365*u[0:t_plot] ,"speed (m/yr)" , "Velocity" ,s[0:t_plot] 
-#         , False , grounding_line  , t_plot,DT_days, n , DX ,bedrock )
-# 
-# 
-# 
-# pf.plot_simpel(time_axis, flow_dif[0:t_plot] *24*365*3600*RHOI / (10e12), 
-#             "Evolution flux balance" , r"$\Delta$ flux (GT/yr)"
-#             ,"Time days (days)" , False , "nothin" , "darkgreen")
-# 
-# pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution grounding line" , 
-#             "Distance to influx (km)", "Time (days)" , True , 
-#             "Initial flux: {:.2f} in GT/yr"
-#             .format(flux_cons*W*24*365*3600*RHOI / (10e12)) , "darkblue")
+pf.plot(h[0:t_plot,:] , "Height (m)" , "Elevation shelf" ,s[0:t_plot,:] 
+        , True , grounding_line , t_plot,DT_days, n , DX ,bedrock )
+pf.plot(3600*24*365*u[0:t_plot] ,"speed (m/yr)" , "Velocity" ,s[0:t_plot] 
+        , False , grounding_line  , t_plot,DT_days, n , DX ,bedrock )
+
+
+
+pf.plot_simpel(time_axis, flow_dif[0:t_plot] *24*365*3600*RHOI / (10e12), 
+            "Evolution flux balance" , r"$\Delta$ flux (GT/yr)"
+            ,"Time days (days)" , False , "nothin" , "darkgreen")
+
+pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution grounding line" , 
+            "Distance to influx (km)", "Time (days)" , True , 
+            "Initial flux: {:.2f} in GT/yr"
+            .format(flux_cons*W*24*365*3600*RHOI / (10e12)) , "darkblue")
 
 
 ###############################################################
@@ -193,7 +194,7 @@ time_axis = np.linspace(0 , t_plot*DT_days , t_plot)                       # tim
 ###############################################################
 
 # directory = "/home/students/6252699/soac/"
-directory = "/home/students/6256481/"
+# directory = "/home/students/6256481/"
 np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
             As , DT_days , time * DT_days , DX , flux_cons , bed),        
             (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
@@ -208,5 +209,5 @@ np.savetxt( directory + "output_u_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.
             (s[0,:] ,  s[int(t_plot/3),:],  s[int(t_plot*2/3),:], s[t_plot,:])) 
 #   
 
-# end = timer()
-# print ("Time elapsed: {}".format(end-start)) 
+end = timer()
+print ("Time elapsed: {}".format(end-start)) 
