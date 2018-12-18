@@ -45,9 +45,9 @@ h_left        = 600        # initial height    m
 h_right       = 200
 bedrock_l     = -200
 bedrock_r     = -250
-slope         = abs(bedrock_r - bedrock_l) / L
-loc           = 40e3
-width         = 10e3
+slope         = 0.005
+loc           = 30e3
+width         = 5e3
 amp           = 300
 
 h_initial      = np.linspace(h_left , h_right, n)            # initial gues for the velocity
@@ -64,7 +64,7 @@ bedrock        = np.linspace(bedrock_l , bedrock_r , n)
 ###############################################################
 # Variables
 ###############################################################
-time          = int(1500/ DT_days)      # timesteps
+time          = int(50/ DT_days)      # timesteps
 gamma         = 0.3        # inertia
 
 
@@ -79,7 +79,7 @@ def make_bedrock_gauss(n,L, b0, slope, amp, loc, width):
     ''' n = number of grid points, L = length domain in m''' 
     
     x = np.linspace(0,L,n)
-    bed_profile = b0  - slope *x  + amp * np.exp ( -((x - loc) / width)**2 )  +  400 * np.exp ( -((x-5e3) / (20e3))**2 )- 400
+    bed_profile = b0  - slope *x  + amp * np.exp ( -((x - loc) / width)**2 )  +  400 * np.exp ( -((x-3e3) / (15e3))**2 )- 400
     
     return bed_profile
 
@@ -87,6 +87,7 @@ bedrock = make_bedrock_gauss(n ,L ,bedrock_l , slope ,amp,loc , width )
 import matplotlib.pyplot as plt
 plt.plot(bedrock)
 plt.show()
+bedrock_r     = bedrock[-1]
 
 
 
