@@ -71,7 +71,6 @@ gamma         = 0.3        # inertia
 
 ''' Constant influx '''
 flux_cons = 50e-3 
-# flux_cons = np.linspace(flux_cons , flux_cons , time)
 
 
 ###############################################################
