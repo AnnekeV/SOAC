@@ -64,7 +64,7 @@ bedrock        = np.linspace(bedrock_l , bedrock_r , n)
 ###############################################################
 # Variables
 ###############################################################
-time          = int(50/ DT_days)      # timesteps
+time          = int(10000/ DT_days)      # timesteps
 gamma         = 0.3        # inertia
 
 
@@ -190,12 +190,18 @@ pf.plot_simpel(time_axis ,grounding_line[0:t_plot] * (DX/1000), "Evolution groun
 
 # directory = "/home/students/6252699/soac/"
 # directory = "/home/students/6256481/"
-# np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
-#             As , DT_days , time * DT_days , DX , flux_cons),        
-#             (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
-# np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
-#             As , DT_days , time * DT_days , DX , flux_cons),        
-#             (h[0,:] , h[t_plot,:])) 
+np.savetxt( directory + "output_gf_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+            As , DT_days , time * DT_days , DX , flux_cons),        
+            (flow_dif[0:t_plot] , grounding_line[0:t_plot]))
+np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+            As , DT_days , time * DT_days , DX , flux_cons),        
+            (h[0,:] ,  h[int(t_plot/3),:],  h[int(t_plot*2/3),:], h[t_plot,:])) 
+np.savetxt( directory + "output_u_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+            As , DT_days , time * DT_days , DX , flux_cons),        
+            (u[0,:] ,  u[int(t_plot/3),:],  u[int(t_plot*2/3),:], u[t_plot,:])) 
+np.savetxt( directory + "output_u_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}.txt" .format(A ,
+            As , DT_days , time * DT_days , DX , flux_cons),        
+            (s[0,:] ,  s[int(t_plot/3),:],  s[int(t_plot*2/3),:], s[t_plot,:])) 
 #   
 
 end = timer()
