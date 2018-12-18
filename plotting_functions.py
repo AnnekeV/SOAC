@@ -23,7 +23,7 @@ sys.path.insert(0,"C:/Users/annek/Documents/Python Scripts")
 import plotting_parameters as pm
 im.reload(pm)
 
-directory = "C:/Users/annek/Documents/2018-2019/SOAC/project"
+directory = "C:/Users/annek/Documents/2018-2019/SOAC/project/"
 # directory = "/Users/niekcollotdescury/Desktop/SOAC/project"
 
 ###############################################################
@@ -78,7 +78,7 @@ def plot(X , ylabel, title ,s , bolean , grounding , run_time , DT_days , n, DX 
             ''' plot ice surface line and bottom ice line '''
             ax.plot(x_grid , s[i, :] , color = colors_i[i] , label = "Thickness: t = {} days".format(i*DT_days)) 
             ax.plot(x_grid , (s[i,:]-X[i,:]) , color = colors_i[i] ) 
-            plt.yticks(np.arange(-600 ,400 , 100 ))
+            plt.yticks(np.arange(-1000 ,2000 , 250 ))
             
             ''' Show position grounding line with arrow to text box '''
             # ax.plot([floating , floating] , [(s[i,floating]-X[i,floating]) , s[i , floating]], linestyle = '--' , linewidth = 3 , color = 'black')

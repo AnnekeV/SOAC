@@ -33,7 +33,7 @@ W       =  40000
 DT_days =  0.5
 DT      =  24*3600*DT_days  # s
 A       =  1e-22           # ice flow parameter
-As      =  150
+As      =  130
 n       =  L//DX            # length shelf
 
 ###############################################################
@@ -50,17 +50,17 @@ loc           = 30e3
 width         = 5e3
 amp           = 300
 
-h_initial      = np.linspace(h_left , h_right, n)            # initial gues for the velocity
+# h_initial      = np.linspace(h_left , h_right, n)            # initial gues for the velocity
 u_initial      = np.linspace(u_rand_left , u_rand_right , n) # initial gues for the height
+
+'''Old h as input'''
+test = np.loadtxt(directory + "output_h_SOAC_A_1e-22_As_150_DT_0.5_T_4000.0_DX_1000_fluxin_0.6_BNL.txt")
+h_initial     = test[-1,:]
+
 
 ''' Linear bedprofile '''
 bedrock        = np.linspace(bedrock_l , bedrock_r , n)
 # bed = "BL"
-
-
-''' Non linear bedprofile '''
-# x = np.arange(0 , n , 1)
-# bedrock = y = y = 200 - 2.449093*x + 0.3359508*x**2 - 0.009628521*x**3 + 0.00007636045*x**4 - 1.837399e-7*x**5
 
 ###############################################################
 # Variables
@@ -70,7 +70,7 @@ gamma         = 0.3        # inertia
 
 
 ''' Constant influx '''
-flux_cons = 500e-3 
+flux_cons = 600e-3 
 
 
 ###############################################################
@@ -91,6 +91,7 @@ bed = "BNL"
 # import matplotlib.pyplot as plt
 # plt.plot(bedrock)
 # plt.show()
+
 
 
 
@@ -127,10 +128,9 @@ def run_code(flux_cons):
         
         outflow = h[t ,-1]*u[t , -1]*W
         flow_dif[t] = outflow - (flux_cons*W) 
-        if abs(flow_dif[t]/(flux_cons*W)) <= 0.01:
+        if abs(flow_dif[t]/(flux_cons*W)) <= 0.001:
             
             stability_count +=1
-            print(stability_count)
             if stability_count == (int(10/DT_days)):
                 t +=1e7
 
@@ -204,7 +204,7 @@ np.savetxt( directory + "output_h_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.
 np.savetxt( directory + "output_u_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
             As , DT_days , time * DT_days , DX , flux_cons, bed),        
             (u[0,:] ,  u[int(t_plot/3),:],  u[int(t_plot*2/3),:], u[t_plot,:])) 
-np.savetxt( directory + "output_u_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
+np.savetxt( directory + "output_s_SOAC_A_{}_As_{}_DT_{}_T_{}_DX_{}_fluxin_{}_{}.txt" .format(A ,
             As , DT_days , time * DT_days , DX , flux_cons, bed),        
             (s[0,:] ,  s[int(t_plot/3),:],  s[int(t_plot*2/3),:], s[t_plot,:])) 
 #   
